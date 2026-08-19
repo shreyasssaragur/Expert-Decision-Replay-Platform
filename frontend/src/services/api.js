@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-    baseURL: "https://expert-decision-replay-platform-akm3.onrender.com",,
+    baseURL: "https://expert-decision-replay-platform-akm3.onrender.com",
     headers: {
         "Content-Type": "application/json",
     },
