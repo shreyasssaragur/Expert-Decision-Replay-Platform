@@ -1,16 +1,11 @@
-import axios from "axios";
-
-const API = "http://127.0.0.1:8000";
+import API from "./api";
 
 // ======================================
 // Get Knowledge Repository
 // ======================================
 
 export const getKnowledgeRepository = async () => {
-
-  const response = await axios.get(
-    `${API}/knowledge`
-  );
+  const response = await API.get("/knowledge");
 
   return response.data;
 };
@@ -20,9 +15,8 @@ export const getKnowledgeRepository = async () => {
 // ======================================
 
 export const getKnowledgeDecision = async (decisionId) => {
-
-  const response = await axios.get(
-    `${API}/knowledge/${decisionId}`
+  const response = await API.get(
+    `/knowledge/${decisionId}`
   );
 
   return response.data;

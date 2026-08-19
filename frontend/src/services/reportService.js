@@ -1,22 +1,16 @@
-import axios from "axios";
-
-const API = "http://127.0.0.1:8000";
-
+import API from "./api";
 
 // ======================================
 // Get Dashboard Report
 // ======================================
 
 export const getDashboardReport = async () => {
-
-  const response = await axios.get(
-    `${API}/reports/dashboard`
+  const response = await API.get(
+    "/reports/dashboard"
   );
 
   return response.data;
-
 };
-
 
 // ======================================
 // Get Complete Decision Report
@@ -25,11 +19,9 @@ export const getDashboardReport = async () => {
 export const getDecisionReportData = async (
   decisionId
 ) => {
-
-  const response = await axios.get(
-    `${API}/reports/decision/${decisionId}`
+  const response = await API.get(
+    `/reports/decision/${decisionId}`
   );
 
   return response.data;
-
 };

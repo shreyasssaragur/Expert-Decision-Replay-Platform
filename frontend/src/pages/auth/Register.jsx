@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import API from "../../services/api";
 import { useNavigate } from "react-router-dom";
 
 function Register() {
@@ -15,21 +15,17 @@ function Register() {
     setMessage("");
 
     try {
-      await axios.post(
-        "http://127.0.0.1:8000/register",
-        {
-          username: username,
-          email: email,
-          password: password,
-        }
-      );
+      await API.post("/register", {
+        username: username,
+        email: email,
+        password: password,
+      });
 
       alert("Registration Successful. Please login.");
 
       navigate("/");
-
     } catch (error) {
-      console.error(error);
+      console.error("Registration Error:", error);
 
       if (error.response?.data?.detail) {
         const detail = error.response.data.detail;
@@ -51,13 +47,11 @@ function Register() {
 
   return (
     <div style={{ padding: "30px" }}>
-
       <h1>Expert Decision Replay Platform</h1>
 
       <h2>Create New Account</h2>
 
       <form onSubmit={handleRegister}>
-
         <div>
           <label>Username</label>
           <br />
@@ -65,9 +59,7 @@ function Register() {
           <input
             type="text"
             value={username}
-            onChange={(e) =>
-              setUsername(e.target.value)
-            }
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
         </div>
@@ -81,9 +73,7 @@ function Register() {
           <input
             type="email"
             value={email}
-            onChange={(e) =>
-              setEmail(e.target.value)
-            }
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
@@ -97,9 +87,7 @@ function Register() {
           <input
             type="password"
             value={password}
-            onChange={(e) =>
-              setPassword(e.target.value)
-            }
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
         </div>
@@ -109,7 +97,6 @@ function Register() {
         <button type="submit">
           Register
         </button>
-
       </form>
 
       {message && (
@@ -128,7 +115,6 @@ function Register() {
       >
         Back to Login
       </button>
-
     </div>
   );
 }

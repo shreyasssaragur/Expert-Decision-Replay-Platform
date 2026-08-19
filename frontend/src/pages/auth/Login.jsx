@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import API from "../../services/api";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
@@ -17,27 +17,44 @@ function Login() {
     setError("");
 
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/login",
-        {
-          email,
-          password,
-        }
-      );
+      const response = await API.post("/login", {
+        email: email,
+        password: password,
+      });
+
+      console.log("Login successful:", response.data);
 
       localStorage.setItem(
         "user",
         JSON.stringify(response.data)
       );
 
+      // If backend returns a token, store it
+      if (response.data.access_token) {
+        localStorage.setItem(
+          "token",
+          response.data.access_token
+        );
+      }
+
       navigate("/dashboard");
     } catch (err) {
-      console.log(err);
+      console.error("Login Error:", err);
 
       if (err.response?.data?.detail) {
-        setError(err.response.data.detail);
+        const detail = err.response.data.detail;
+
+        if (Array.isArray(detail)) {
+          setError(
+            detail
+              .map((item) => item.msg)
+              .join(", ")
+          );
+        } else {
+          setError(detail);
+        }
       } else {
-        setError("Login Failed");
+        setError("Login Failed. Please check your connection.");
       }
     } finally {
       setLoading(false);
@@ -62,6 +79,7 @@ function Login() {
       >
         <div className="card-body p-5">
 
+          {/* Header */}
           <div className="text-center mb-4">
             <h2 className="fw-bold text-primary">
               Expert Decision Replay Platform
@@ -72,14 +90,17 @@ function Login() {
             </p>
           </div>
 
+          {/* Error Message */}
           {error && (
             <div className="alert alert-danger">
               {error}
             </div>
           )}
 
+          {/* Login Form */}
           <form onSubmit={handleLogin}>
 
+            {/* Email */}
             <div className="mb-3">
               <label className="form-label">
                 Email
@@ -97,6 +118,7 @@ function Login() {
               />
             </div>
 
+            {/* Password */}
             <div className="mb-2">
               <label className="form-label">
                 Password
@@ -115,7 +137,6 @@ function Login() {
             </div>
 
             {/* Forgot Password */}
-
             <div className="text-end mb-4">
               <button
                 type="button"
@@ -128,18 +149,22 @@ function Login() {
               </button>
             </div>
 
+            {/* Login Button */}
             <button
               type="submit"
               className="btn btn-primary w-100"
               disabled={loading}
             >
-              {loading ? "Logging in..." : "Login"}
+              {loading
+                ? "Logging in..."
+                : "Login"}
             </button>
 
           </form>
 
           <hr />
 
+          {/* Register */}
           <div className="text-center">
 
             <p className="mb-2">
@@ -149,7 +174,9 @@ function Login() {
             <button
               type="button"
               className="btn btn-outline-primary"
-              onClick={() => navigate("/register")}
+              onClick={() =>
+                navigate("/register")
+              }
             >
               Create New Account
             </button>

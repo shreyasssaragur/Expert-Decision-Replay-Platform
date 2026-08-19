@@ -1,11 +1,9 @@
-import axios from "axios";
-
-const API = "http://127.0.0.1:8000";
+import API from "./api";
 
 const getAuditLogs = async () => {
   const user = JSON.parse(localStorage.getItem("user"));
 
-  const response = await axios.get(`${API}/audit-logs`, {
+  const response = await API.get("/audit-logs", {
     params: {
       user_id: user.user_id,
     },
